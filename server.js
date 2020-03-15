@@ -1,3 +1,11 @@
+
+
+
+
+var express = require('express');
+var app = express();
+var server = require('http').Server(app);
+
 var io = require('socket.io').listen(server);
 io.on('connection', function (socket) {
   console.log('a user connected');
@@ -5,12 +13,6 @@ io.on('connection', function (socket) {
     console.log('user disconnected');
   });
 });
-
-
-
-var express = require('express');
-var app = express();
-var server = require('http').Server(app);
  
 app.use(express.static(__dirname + '/public'));
  
