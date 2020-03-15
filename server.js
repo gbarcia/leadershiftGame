@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
  
 io.on('connection', function (socket) {
   console.log('a user connected');
-
+  console.log(players);
     // create a new player and add it to our players object
 	players[socket.id] = {
 	  rotation: 0,
@@ -35,7 +35,7 @@ io.on('connection', function (socket) {
 	// emit a message to all players to remove this player
 	io.emit('disconnect', socket.id);
 
-    
+
   });
 });
 
