@@ -50,6 +50,15 @@ function create() {
     });
   });
   this.cursors = this.input.keyboard.createCursorKeys();
+
+  this.socket.on('playerMoved', function (playerInfo) {
+  self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    if (playerInfo.playerId === otherPlayer.playerId) {
+      otherPlayer.setRotation(playerInfo.rotation);
+      otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+    }
+  });
+});
 }
  
 function update() {
@@ -70,8 +79,25 @@ if (this.ship) {
     }
   
     this.physics.world.wrap(this.ship, 5);
+
+// emit player movement
+var x = this.ship.x;
+var y = this.ship.y;
+var r = this.ship.rotation;
+if (this.ship.oldPosition && (x !== this.ship.oldPosition.x || y !== this.ship.oldPosition.y || r !== this.ship.oldPosition.rotation)) {
+  this.socket.emit('playerMovement', { x: this.ship.x, y: this.ship.y, rotation: this.ship.rotation });
+}
+ 
+// save old position data
+this.ship.oldPosition = {
+  x: this.ship.x,
+  y: this.ship.y,
+  rotation: this.ship.rotation
+};
+
+
   }
-  
+
 }
 
 function addPlayer(self, playerInfo) {
